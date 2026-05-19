@@ -1,0 +1,23 @@
+{
+  "name": "kiro-openai-proxy",
+  "version": "0.1.0",
+  "description": "OpenAI-compatible HTTP proxy for Kiro CLI ACP/headless mode.",
+  "type": "module",
+  "bin": {
+    "kiro-openai-proxy": "src/server.js"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "kiro",
+    "openai",
+    "proxy",
+    "acp",
+    "agent"
+  ],
+  "author": "Viez AI",
+  "license": "MIT"
+}
