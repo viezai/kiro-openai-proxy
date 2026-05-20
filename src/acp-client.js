@@ -80,15 +80,18 @@ export class KiroACPClient extends EventEmitter {
     return result;
   }
 
-  async prompt(sessionId, text, { timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
+  async prompt(sessionId, text, { timeoutMs = DEFAULT_TIMEOUT_MS, model } = {}) {
     if (!this.sessions.has(sessionId)) this.sessions.set(sessionId, { updates: [], metadata: {} });
     const state = this.sessions.get(sessionId);
     state.updates = [];
 
-    const result = await this.request('session/prompt', {
+    const params = {
       sessionId,
       prompt: [{ type: 'text', text }],
-    }, { timeoutMs });
+    };
+    if (model) params.model = model;
+
+    const result = await this.request('session/prompt', params, { timeoutMs });
 
     return this.#buildPromptResult(sessionId, result);
   }
