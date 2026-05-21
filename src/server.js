@@ -1,7 +1,26 @@
 #!/usr/bin/env node
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import http from 'node:http';
 import { randomUUID } from 'node:crypto';
 import { KiroACPClient } from './acp-client.js';
+
+// Load .env file (zero-dependency)
+const envPath = resolve(process.cwd(), '.env');
+try {
+  const envContent = readFileSync(envPath, 'utf8');
+  for (const line of envContent.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx < 0) continue;
+    const key = trimmed.slice(0, eqIdx).trim();
+    const val = trimmed.slice(eqIdx + 1).trim();
+    if (!(key in process.env)) process.env[key] = val;
+  }
+} catch {
+  // .env file is optional
+}
 
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '0.0.0.0';
